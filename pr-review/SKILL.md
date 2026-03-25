@@ -214,6 +214,58 @@ Overall: READY / NEEDS CHANGES
 
 ---
 
+## Posting to GitHub
+
+### Tone and language rules
+
+- **Always write in English** when posting to GitHub, regardless of the chat language.
+- **Natural tone** — write like a thoughtful human reviewer, not a linter report.
+  - No em dashes (`—`) or double dashes (`--`) between phrases. They read as AI-generated.
+  - No rigid label patterns like `**Issue:**` / `**Fix:**` on every line.
+  - Use plain conversational sentences. "this reads `process.env` at module load time..." reads better than "Issue: Module-level env var — Fix: use ConfigService."
+  - Lowercase is fine to start a sentence when it feels more natural.
+
+### Workflow: triage first, post once
+
+1. **Triage in chat** — collect all findings with file and line numbers before posting anything to GitHub.
+2. **Post all at once** in a single `gh api` call — minimises email notifications to the PR author.
+3. **Submit** the review as `APPROVE`, `REQUEST_CHANGES`, or `COMMENT`.
+
+### Command to post inline comments
+
+Write the payload to a temp file and pass via `--input` (do not use `-F comments=...` — it cannot handle arrays):
+
+```bash
+cat > /tmp/pr-review-payload.json << 'EOF'
+{
+  "commit_id": "<HEAD_SHA>",
+  "body": "overall summary here",
+  "event": "REQUEST_CHANGES",
+  "comments": [
+    {
+      "path": "path/to/file.ts",
+      "line": 10,
+      "side": "RIGHT",
+      "body": "comment text here"
+    }
+  ]
+}
+EOF
+
+gh api repos/<owner>/<repo>/pulls/<number>/reviews \
+  -X POST \
+  --input /tmp/pr-review-payload.json
+```
+
+Get the HEAD SHA:
+```bash
+gh api repos/<owner>/<repo>/pulls/<number> --jq '.head.sha'
+```
+
+`event` values: `REQUEST_CHANGES` (blocks merge), `APPROVE` (green), `COMMENT` (neutral). Note: `REQUEST_CHANGES` and `APPROVE` cannot be used on your own PR.
+
+---
+
 ## Individual Skills
 
 Run separately if you only need one perspective:
