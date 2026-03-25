@@ -27,6 +27,7 @@ gadanihiman/grs-skills  (this repo)
 | `pr-review` | Full pre-submission PR review — Static Analysis + Human Reviewer patterns combined |
 | `pr-review-static` | Static analysis patterns (B1–B21): runtime bugs, logic errors, silent failures |
 | `pr-review-human` | Human reviewer patterns (G1–G16): naming, complexity, DB schema, test design |
+| `pr-review-frontend` | Frontend patterns (F1–F16): React, Next.js, Vue, Tailwind, React Query |
 
 ### Tools & Platforms
 
