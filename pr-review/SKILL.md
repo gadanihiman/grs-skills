@@ -1,6 +1,6 @@
 ---
 name: pr-review
-description: Full pre-submission PR self-review combining static analysis and human reviewer patterns. Use when user says "full PR review", "pre-submit review", "review before pushing", or wants a complete check before requesting review.
+description: Full pre-submission backend PR self-review (NestJS/TypeScript) combining static analysis and human reviewer patterns. Use when user says "full PR review", "pre-submit review", "review before pushing", or wants a complete backend check. For frontend PRs use pr-review-frontend instead.
 ---
 
 # PR Review — Full Pre-Submission Check

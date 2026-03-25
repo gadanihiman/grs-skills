@@ -1,6 +1,6 @@
 ---
 name: pr-review-human
-description: Self-review a PR against human reviewer patterns before submitting. Use when user says "review my PR", "check my PR", "human review", "self-review", or wants to pre-check code before requesting review.
+description: Human reviewer self-review for backend PRs — naming, complexity, DB schema, test design, type precision. Use when user says "review my PR", "check my PR", "human review", or wants design/readability feedback. Applies to any TypeScript backend; pair with pr-review-frontend for full-stack PRs.
 ---
 
 # PR Review — Human Reviewer Patterns

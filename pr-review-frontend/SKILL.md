@@ -1,6 +1,6 @@
 ---
 name: pr-review-frontend
-description: Frontend PR self-review for React, Next.js, Vue.js, Tailwind, and React Query. Use when user says "frontend review", "review my UI code", "check my React PR", or wants to catch frontend-specific issues before submitting.
+description: Frontend PR self-review for React, Next.js, Vue.js, Tailwind CSS, and React Query (F1–F16). Use when user says "frontend review", "review my React/Vue PR", "check my UI code", working in a frontend repo, or when the diff contains .tsx/.vue/.css files. Pair with pr-review-human for a complete review.
 ---
 
 # PR Review — Frontend Patterns

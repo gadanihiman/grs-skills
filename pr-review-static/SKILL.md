@@ -1,6 +1,6 @@
 ---
 name: pr-review-static
-description: Static analysis self-review for a PR — runtime bugs, logic errors, silent failures, test correctness. Use when user says "static review", "check for bugs", "logic review", or wants to catch runtime/logic bugs before submitting a PR.
+description: Static analysis self-review for a backend PR (NestJS/TypeScript) — runtime bugs, logic errors, silent failures, test correctness. Use when user says "static review", "check for bugs", "logic review", or wants to catch runtime/logic bugs. Best for backend/API code; for frontend use pr-review-frontend.
 ---
 
 # PR Review — Static Analysis Patterns
