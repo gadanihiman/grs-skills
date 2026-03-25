@@ -20,6 +20,16 @@ gadanihiman/grs-skills  (this repo)
 
 ## Skills
 
+### Code Review
+
+| Skill | Description |
+|---|---|
+| `pr-review` | Full pre-submission PR review — Static Analysis + Human Reviewer patterns combined |
+| `pr-review-static` | Static analysis patterns (B1–B21): runtime bugs, logic errors, silent failures |
+| `pr-review-human` | Human reviewer patterns (G1–G16): naming, complexity, DB schema, test design |
+
+### Tools & Platforms
+
 | Skill | Description |
 |---|---|
 | `figma` | Figma design-to-code workflow |
