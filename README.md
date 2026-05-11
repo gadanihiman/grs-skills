@@ -44,11 +44,13 @@ gadanihiman/grs-skills  (this repo)
 
 ### Preferred: repo-driven global install
 
+#### macOS / Linux
+
 ```bash
-./scripts/install-global-skills.sh
+./scripts/install-global-skills.sh --no-windows
 ```
 
-This initializes and symlinks every skill in this repo to the current machine's global agent directories:
+Use this on native Unix environments such as macOS and Linux. It initializes and symlinks every skill in this repo to:
 
 - `~/.claude/skills/`
 - `~/.codex/skills/`
@@ -56,7 +58,18 @@ This initializes and symlinks every skill in this repo to the current machine's 
 - `~/.gemini/skills/`
 - `~/.junie/skills/`
 
-On WSL, it also attempts to initialize Windows-native agent directories under `/mnt/c/Users/<you>/...` and points them back to this repo via `\\wsl.localhost\...`.
+#### WSL + Windows host
+
+```bash
+./scripts/install-global-skills.sh
+```
+
+On WSL, the installer does two things:
+
+- initializes the WSL/Linux agent skill directories under `~/...`
+- detects the Windows home under `/mnt/c/Users/<you>/...` and creates matching links there too
+
+Windows-native links point back to this repo via `\\wsl.localhost\...`, so the repo in WSL remains the single source of truth.
 
 Useful options:
 
@@ -87,7 +100,8 @@ cd ~/Developer/grs-skills
 npx skills init my-new-skill    # creates my-new-skill/SKILL.md
 # edit my-new-skill/SKILL.md
 git add . && git commit -m "add my-new-skill" && git push
-# No need to re-run npx skills add — new folder is picked up automatically via symlink
+# Re-run the installer so the new skill gets linked globally
+./scripts/install-global-skills.sh --no-windows
 ```
 
 ## Skill Format
