@@ -6,16 +6,17 @@ Managed with [skills.sh](https://skills.sh) CLI by Vercel Labs.
 
 ## How It Works
 
-Skills are installed to `~/.agents/skills/` and symlinked to each agent's directory. Edit once → every agent gets the update.
+Skills in this repo are symlinked directly into each agent's global skill directory. Edit once in this repo → every linked agent gets the update.
 
 ```
 gadanihiman/grs-skills  (this repo)
-       ↓ npx skills add
-~/.agents/skills/       ← central hub
+       ↓ install-global-skills.sh
        ↓ symlinks
 ~/.claude/skills/
 ~/.codex/skills/
-~/.cursor/skills-cursor/
+~/.cursor/skills/
+~/.gemini/skills/
+~/.junie/skills/
 ```
 
 ## Skills
@@ -24,10 +25,10 @@ gadanihiman/grs-skills  (this repo)
 
 | Skill | Description |
 |---|---|
-| `pr-review` | Full pre-submission PR review — Static Analysis + Human Reviewer patterns combined |
-| `pr-review-static` | Static analysis patterns (B1–B21): runtime bugs, logic errors, silent failures |
-| `pr-review-human` | Human reviewer patterns (G1–G16): naming, complexity, DB schema, test design |
-| `pr-review-frontend` | Frontend patterns (F1–F16): React, Next.js, Vue, Tailwind, React Query |
+| `pr-check` | Full backend PR self-review checklist — static analysis + human reviewer patterns |
+| `pr-check-static` | Static analysis patterns (B1–B21): runtime bugs, logic errors, silent failures |
+| `pr-check-style` | Human reviewer patterns (G1–G16): naming, complexity, DB schema, test design |
+| `pr-check-frontend` | Frontend patterns (F1–F16): React, Next.js, Vue, Tailwind, React Query |
 
 ### Tools & Platforms
 
@@ -41,15 +42,39 @@ gadanihiman/grs-skills  (this repo)
 
 ## Setup (New Machine)
 
-### 1. Install skills
+### Preferred: repo-driven global install
+
+```bash
+./scripts/install-global-skills.sh
+```
+
+This initializes and symlinks every skill in this repo to the current machine's global agent directories:
+
+- `~/.claude/skills/`
+- `~/.codex/skills/`
+- `~/.cursor/skills/`
+- `~/.gemini/skills/`
+- `~/.junie/skills/`
+
+On WSL, it also attempts to initialize Windows-native agent directories under `/mnt/c/Users/<you>/...` and points them back to this repo via `\\wsl.localhost\...`.
+
+Useful options:
+
+```bash
+./scripts/install-global-skills.sh --dry-run
+./scripts/install-global-skills.sh --no-windows
+./scripts/install-global-skills.sh --windows-mode copy
+```
+
+### Legacy: install with skills.sh
 
 ```bash
 npx skills add gadanihiman/grs-skills -g --agent '*' --yes
 ```
 
-### 2. Fix Codex & Cursor symlinks
+### Legacy fix for old skills.sh installs
 
-> **Note:** skills.sh v1.4.5 bug — Codex and Cursor are not symlinked automatically.
+> **Note:** kept for older `skills.sh` setups where Codex and Cursor were not symlinked automatically.
 
 ```bash
 bash ~/Developer/grs-skills/scripts/fix-agent-symlinks.sh
