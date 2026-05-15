@@ -121,6 +121,11 @@ Work through each category below. Flag every issue found with the file path and 
 - Inline casts scattered across multiple methods are easy to get out of sync when the JWT payload shape changes.
 - Pattern to flag: the same `as X & { ... }` expression in more than one method in the same file.
 
+### G21. `import type` for Type-Only Imports
+- When an import is used only as a type annotation (never instantiated or called at runtime), use `import type { Foo } from '...'` instead of `import { Foo } from '...'`.
+- Common cases: entity classes used only as `Repository<Entity>` type params, Express `Request`/`Response` used only in type positions, interfaces or types from external packages.
+- `import type` is erased entirely at compile time — zero runtime cost and prevents accidental runtime dependency on the imported module.
+
 ---
 
 ## Step 3: Report Findings

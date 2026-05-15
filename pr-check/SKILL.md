@@ -1,6 +1,6 @@
 ---
 name: pr-check
-description: Technical checklist for backend PR self-review (NestJS/TypeScript) — B1–B21 static analysis + G1–G20 design patterns. Use when you want to run a checklist against a PR or piece of code. For the full review workflow with GitHub posting and Notion integration, use pr-review.
+description: Technical checklist for backend PR self-review (NestJS/TypeScript) — B1–B21 static analysis + G1–G21 design patterns. Use when you want to run a checklist against a PR or piece of code. For the full review workflow with GitHub posting and Notion integration, use pr-review.
 ---
 
 # PR Check — Backend Checklist
@@ -10,7 +10,7 @@ description: Technical checklist for backend PR self-review (NestJS/TypeScript) 
 Runs both checklists against the diff:
 
 1. **Static Analysis (B1–B21)** — runtime bugs, logic errors, silent failures, test correctness
-2. **Design Review (G1–G20)** — naming, complexity, documentation, test design, type precision
+2. **Design Review (G1–G21)** — naming, complexity, documentation, test design, type precision
 
 ---
 
@@ -105,7 +105,7 @@ Run `git diff main...HEAD` to see all changed files and understand the scope.
 
 ---
 
-## Part 2 — Design Review (G1–G20)
+## Part 2 — Design Review (G1–G21)
 
 ### G1. Method Complexity
 - Methods longer than ~40 lines with multiple concerns — extract to focused helpers.
@@ -189,6 +189,11 @@ Run `git diff main...HEAD` to see all changed files and understand the scope.
 - When the same type assertion appears 2+ times in a file (e.g., `req as Request & { user?: { sub: string } }`), extract it to a named type in `src/types/`.
 - Pattern to flag: the same `as X & { ... }` expression in more than one method in the same file.
 
+### G21. `import type` for Type-Only Imports
+- When an import is used only as a type annotation (never instantiated or called at runtime), use `import type { Foo } from '...'` instead of `import { Foo } from '...'`.
+- Common cases: entity classes used only as `Repository<Entity>` type params, Express `Request`/`Response` in type positions, interfaces from external packages.
+- `import type` is erased entirely at compile time — zero runtime cost, prevents accidental runtime dependency.
+
 ---
 
 ## Step 2: Report Findings
@@ -221,5 +226,5 @@ Overall: READY / NEEDS CHANGES
 
 Run separately for a focused check:
 - `pr-check-static` — B1–B21 static analysis only
-- `pr-check-style` — G1–G20 design patterns only
+- `pr-check-style` — G1–G21 design patterns only
 - `pr-check-frontend` — F1–F16 React/Vue/Next.js/Tailwind
