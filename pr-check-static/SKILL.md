@@ -57,6 +57,7 @@ Work through each category. Flag every issue with file path and line number.
 ### B8. Missing Critical Assertions
 - Happy-path tests: are all critical side effects asserted (state changes, service calls, DB writes)?
 - Guard/skip tests: are downstream methods asserted `.not.toHaveBeenCalled()`?
+- **Fire-and-forget paths**: if a method uses `.catch()` to silently swallow an error (e.g., a non-critical cache write), add a test that rejects the underlying call and asserts the method still returns successfully — confirming the error is truly swallowed and doesn't propagate.
 
 ### B9. URL Path Construction
 - Same path string used for both signature generation and the actual HTTP call?

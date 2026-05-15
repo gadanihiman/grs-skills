@@ -40,6 +40,7 @@ Work through each category below. Flag every issue found with the file path and 
 - New method similar to an existing one — explain the difference in a comment.
 - New state transitions — update state machine or architecture docs.
 - Complex helpers without JSDoc or inline explanation.
+- **API contract docs**: if SQL queries, computation logic, or response shapes in `.md` contract files are copy-pasted from an earlier draft, verify they still match the final implementation. A bug fix that changes query logic must update the contract doc too.
 
 ### G5. Test Data Realism
 - Numeric fields (price, quantity, dimensions, weight) using `faker.string.alphanumeric()` instead of number generators.
@@ -94,6 +95,31 @@ Work through each category below. Flag every issue found with the file path and 
 - Migration `varchar` columns: specify explicit length where the domain has a known maximum (hash, code, slug).
 - Column defaults: nullable columns should default to `null`; non-nullable columns should have an explicit default.
 - Index design: UNIQUE index on lookup columns (hash, token, code); don't index columns never used as a query filter.
+- **Index coverage**: for every new JOIN or `WHERE` clause in the PR, check if the column already has an index. Missing indexes on FK columns (`order_uuid`, `client_uuid`, `shipment_uuid`) cause full table scans.
+- **Composite vs single-column index**: if a query filters on two columns together, evaluate a composite index — document the decision in the migration comment. A single-column FK index is always foundational; composite can be deferred when a cache (e.g., 1-hour Redis) keeps DB hit frequency low.
+- **CONCURRENTLY**: large production tables may need `CREATE INDEX CONCURRENTLY`. Use `queryRunner.connection.query()` with `{ transaction: false }` since TypeORM's `createIndex()` does not support it natively.
+
+### G17. Large Function Refactor
+- New or modified public methods longer than ~40 lines that handle multiple distinct concerns should be split into focused private helpers.
+- Signs a method is too large: more than one level of nesting, mixed IO + business logic + formatting in one body, or a comment that says "step 1 / step 2".
+- Each helper should do one thing and be nameable with a clear verb phrase (e.g., `resolveTimezone`, `buildCacheKey`, `queryMonthlyMetrics`).
+
+### G18. JSDoc on Public Methods
+- Every new public function or method in services, helpers, guards, and `libs/` exports must have a JSDoc block.
+- Minimum required: one-sentence imperative summary + `@param` for non-obvious params + `@returns` when the return type alone is not self-explanatory.
+- Add `@throws` for every NestJS HTTP exception that can escape the method.
+- Add `@see {@link Symbol}` to link to the primary collaborator when relevant.
+- Private methods only need a comment if the logic is non-obvious; they do not require full JSDoc.
+
+### G19. Test Constant Naming Convention
+- Top-level fixture constants in `*.spec.ts` files must be prefixed with `TEST_` or `MOCK_` to distinguish them from production constants at a glance.
+- Examples: `TEST_CLIENT_UUID`, `MOCK_ORDER_UUID`, `TEST_API_KEY`.
+- Check: scan new spec files for bare `const CLIENT_UUID`, `const ORDER_UUID`, etc. without a prefix.
+
+### G20. Repeated Inline Type Casts
+- When the same type assertion appears 2+ times in a file (e.g., `req as Request & { user?: { sub: string } }`), extract it to a named type in `src/types/`.
+- Inline casts scattered across multiple methods are easy to get out of sync when the JWT payload shape changes.
+- Pattern to flag: the same `as X & { ... }` expression in more than one method in the same file.
 
 ---
 
